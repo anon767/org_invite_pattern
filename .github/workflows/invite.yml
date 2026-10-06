@@ -1,0 +1,31 @@
+name: Invite
+
+# Someone opens a "Request access" issue -> invite them to the org and the students team.
+on:
+  issues:
+    types: [opened]
+
+permissions: {}
+
+jobs:
+  invite:
+    # Skipped until the App is configured (e.g. in the template repo itself).
+    if: vars.APP_CLIENT_ID != '' && contains(github.event.issue.labels.*.name, 'access-request')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          sparse-checkout: .github/scripts
+      - uses: actions/create-github-app-token@v3
+        id: app
+        with:
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+      - uses: actions/github-script@v9
+        env:
+          STUDENTS_TEAM: ${{ vars.STUDENTS_TEAM || 'students' }}
+        with:
+          github-token: ${{ steps.app.outputs.token }}
+          script: |
+            await require('./.github/scripts/invite.cjs')({ github, context, core })

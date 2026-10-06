@@ -8,35 +8,33 @@ OUT = Path(__file__).resolve().parent
 
 LANES = {  # name -> (x, colour)
     "Student": (1.0, "#2563eb"),
-    "Sign-up page\n(this Worker)": (4.2, "#16a34a"),
+    "GitHub Actions\n(join repo)": (4.2, "#16a34a"),
     "GitHub": (7.4, "#24292f"),
     "Grader": (10.2, "#9333ea"),
 }
 X = {k.split("\n")[0]: v[0] for k, v in LANES.items()}
 
 PHASES = [  # (title, first step y, last step y)
-    ("1  Join the organization", 1.6, 5.9),
-    ("2  Create the project repo", 6.6, 8.9),
-    ("3  Grade", 9.6, 10.2),
+    ("1  Join the organization", 1.6, 5.0),
+    ("2  Create the project repo", 5.7, 7.3),
+    ("3  Grade", 8.0, 8.6),
 ]
 
 STEPS = [  # (from, to, label, y)
-    ("Student", "Sign-up page", "Click “Connect GitHub”", 2.0),
-    ("Sign-up page", "GitHub", "Send student to GitHub sign-in", 2.9),
-    ("GitHub", "Sign-up page", "Signed in: GitHub username", 3.8),
-    ("Sign-up page", "GitHub", "Invite to org + students team", 4.7),
-    ("GitHub", "Student", "Invite email", 5.6),
-    ("Student", "GitHub", "Accept invite, create repo in the org", 7.0),
-    ("GitHub", "Sign-up page", "Webhook: new repository", 7.9),
-    ("Sign-up page", "GitHub", "Make repo private, add graders (read)", 8.8),
-    ("Grader", "GitHub", "Open repos with own account", 10.0),
+    ("Student", "GitHub", "Open the “Request access” link, click Create", 2.0),
+    ("GitHub", "GitHub Actions", "Issue opened by the student", 2.9),
+    ("GitHub Actions", "GitHub", "Invite to org + students team, close issue", 3.8),
+    ("GitHub", "Student", "Invite email", 4.7),
+    ("Student", "GitHub", "Accept invite, create repo in the org", 6.1),
+    ("GitHub Actions", "GitHub", "Every 10 min: make private, add graders (read)", 7.0),
+    ("Grader", "GitHub", "Open repos with own account", 8.4),
 ]
 
 
 def main() -> None:
-    fig, ax = plt.subplots(figsize=(11.5, 8.4))
+    fig, ax = plt.subplots(figsize=(11.5, 7.2))
     ax.set_xlim(-0.2, 11.4)
-    ax.set_ylim(11.0, -0.3)
+    ax.set_ylim(9.4, -0.3)
     ax.axis("off")
     fig.patch.set_facecolor("white")
 
@@ -52,7 +50,7 @@ def main() -> None:
                                     fc=colour, ec="none", zorder=3))
         ax.text(x, 0.42, name, ha="center", va="center", color="white", fontsize=11, weight="bold",
                 linespacing=1.1, zorder=4)
-        ax.plot([x, x], [0.85, 10.6], color="#afb8c1", lw=1.2, ls=(0, (4, 4)), zorder=1)
+        ax.plot([x, x], [0.85, 9.0], color="#afb8c1", lw=1.2, ls=(0, (4, 4)), zorder=1)
 
     for n, (src, dst, label, y) in enumerate(STEPS, 1):
         x1, x2 = X[src], X[dst]
@@ -63,7 +61,7 @@ def main() -> None:
         ax.text(mid, y - 0.17, f"{n}.  {label}", ha="center", va="bottom", fontsize=10, zorder=4,
                 bbox=dict(fc="white", ec="none", pad=1.5))
 
-    ax.text(5.6, 10.85, "Nobody shares a login. Graders use their own GitHub accounts in the “graders” team.",
+    ax.text(5.6, 9.25, "Nobody shares a login. Graders use their own GitHub accounts in the “graders” team.",
             ha="center", fontsize=9.5, color="#57606a", style="italic")
 
     fig.tight_layout(pad=0.3)
