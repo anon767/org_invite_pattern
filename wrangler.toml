@@ -1,0 +1,20 @@
+name = "org-invite"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+ORG = "your-org"                 # GitHub organization
+GRADERS_TEAM = "graders"         # team slug that gets read access to every new repo
+APP_ID = "123456"                # GitHub App ID
+CLIENT_ID = "Iv23..."            # GitHub App client ID
+BASE_URL = "https://org-invite.example.workers.dev"   # where this Worker runs, no trailing slash
+
+# Student list: key "email:<address>" -> team slug
+[[kv_namespaces]]
+binding = "ROSTER"
+id = "replace-with-your-kv-namespace-id"
+
+# Secrets (set with `npx wrangler secret put NAME`, never commit them):
+#   APP_PRIVATE_KEY   GitHub App private key, PKCS#8 PEM
+#   CLIENT_SECRET     GitHub App client secret
+#   WEBHOOK_SECRET    GitHub App webhook secret

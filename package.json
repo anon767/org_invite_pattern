@@ -1,0 +1,14 @@
+{
+  "name": "org-invite-pattern",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "roster": "node scripts/roster.mjs",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}
