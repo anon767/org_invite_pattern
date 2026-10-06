@@ -1,4 +1,4 @@
-"""Draw docs/flow.svg and docs/flow.png: python docs/diagram.py (needs matplotlib)."""
+"""Draw docs/how-it-works.svg and docs/how-it-works.png: python docs/diagram.py (needs matplotlib)."""
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -67,8 +67,8 @@ def main() -> None:
             ha="center", fontsize=9.5, color="#57606a", style="italic")
 
     fig.tight_layout(pad=0.3)
-    fig.savefig(OUT / "flow.svg", facecolor="white")
-    fig.savefig(OUT / "flow.png", dpi=160, facecolor="white")
+    fig.savefig(OUT / "how-it-works.svg", facecolor="white")
+    fig.savefig(OUT / "how-it-works.png", dpi=160, facecolor="white")
 
 
 

@@ -5,7 +5,7 @@ ends up private and readable by your graders, and nobody shares a GitHub login.
 
 ## How it works
 
-![How it works: student signs in, gets invited, creates a repo; the webhook makes it private and shares it with graders](docs/flow.png)
+![How it works: student signs in, gets invited, creates a repo; the webhook makes it private and shares it with graders](docs/how-it-works.png)
 
 1. The student opens the page and signs in with GitHub.
 2. The Worker invites them to the organization and the `students` team.
@@ -99,4 +99,4 @@ has read access.
 | `src/github.js` | GitHub API helpers: App JWT, tokens, webhook signature check |
 | `test/worker.test.mjs` | Tests against a fake GitHub API |
 | `wrangler.toml` | Cloudflare Worker settings |
-| `docs/diagram.py` | Draws `docs/flow.png` and `docs/flow.svg` (`python docs/diagram.py`, needs matplotlib) |
+| `docs/diagram.py` | Draws `docs/how-it-works.png` and `docs/how-it-works.svg` (`python docs/diagram.py`, needs matplotlib) |
