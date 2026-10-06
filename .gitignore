@@ -2,5 +2,3 @@ node_modules/
 .wrangler/
 .dev.vars
 *.pem
-*.csv
-roster.json

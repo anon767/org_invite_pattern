@@ -2,7 +2,7 @@
 //
 //   GET  /          landing page with a "Connect GitHub" button
 //   GET  /login     redirect to GitHub sign-in
-//   GET  /callback  check the student list, then invite to the org
+//   GET  /callback  invite the signed-in user to the org and the students team
 //   POST /webhook   on every new repo: make it private, give the graders team read access
 
 import { exchangeCode, gh, installationToken, revokeUserToken, verifyWebhook } from "./github.js";
@@ -25,10 +25,10 @@ export default {
 
 function landing(env) {
   return page(`Join ${env.ORG} on GitHub`, `
-    <p>Sign in with GitHub. If you are on the student list, you get an invite to the
-    <b>${esc(env.ORG)}</b> organization, where you create your project repositories.</p>
+    <p>Sign in with GitHub and you get an invite to the <b>${esc(env.ORG)}</b>
+    organization, where you create your project repositories.</p>
     <p><a class="btn" href="/login">Connect GitHub</a></p>
-    <p class="muted">We only read your GitHub username and your verified email addresses, once.</p>`);
+    <p class="muted">We only read your GitHub username, once.</p>`);
 }
 
 function login(env) {
@@ -55,25 +55,10 @@ async function callback(request, env, url) {
   // 1. Who is this? (verified by GitHub sign-in)
   const userToken = await exchangeCode(env, url.searchParams.get("code"));
   const user = await gh(userToken, "GET", "/user");
-  const emails = await gh(userToken, "GET", "/user/emails");
   await revokeUserToken(env, userToken);
-  if (user.status !== 200 || emails.status !== 200) throw new Error("Could not read GitHub profile");
+  if (user.status !== 200) throw new Error("Could not read GitHub profile");
 
-  // 2. Are they on the student list? Match any verified GitHub email.
-  let team = null;
-  for (const e of emails.data.filter((e) => e.verified)) {
-    team = await env.ROSTER.get(`email:${e.email.toLowerCase()}`);
-    if (team) break;
-  }
-  if (!team) {
-    return page("We could not find you on the student list", `
-      <p>None of the verified email addresses on your GitHub account match the student list.</p>
-      <p>Add the email address you use for your program to GitHub
-      (<a href="https://github.com/settings/emails">Settings → Emails</a>), verify it, then
-      <a href="/">try again</a>.</p>`, 403);
-  }
-
-  // 3. Invite (or tell them they are already in).
+  // 2. Invite (or tell them they are already in).
   const token = await installationToken(env);
   const login = user.data.login;
   const invitationUrl = `https://github.com/orgs/${env.ORG}/invitation`;
@@ -85,8 +70,8 @@ async function callback(request, env, url) {
     return page("Your invite is waiting", `<p><a href="${invitationUrl}">Accept your invite</a> (it expires after 7 days).</p>`);
   }
 
-  const teamInfo = await gh(token, "GET", `/orgs/${env.ORG}/teams/${encodeURIComponent(team)}`);
-  if (teamInfo.status !== 200) throw new Error(`Team "${team}" not found in ${env.ORG}`);
+  const teamInfo = await gh(token, "GET", `/orgs/${env.ORG}/teams/${env.STUDENTS_TEAM}`);
+  if (teamInfo.status !== 200) throw new Error(`Team "${env.STUDENTS_TEAM}" not found in ${env.ORG}`);
   const inv = await gh(token, "POST", `/orgs/${env.ORG}/invitations`, {
     invitee_id: user.data.id,
     role: "direct_member",
