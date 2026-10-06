@@ -1,4 +1,4 @@
-// Self-service access to a GitHub organization (the "Epic Games" pattern).
+// Self-service access to a GitHub organization.
 //
 //   GET  /          landing page with a "Connect GitHub" button
 //   GET  /login     redirect to GitHub sign-in

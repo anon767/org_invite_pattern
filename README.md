@@ -1,8 +1,7 @@
 # org_invite_pattern
 
-Let students join your GitHub organization by themselves, the way Epic Games gives
-people access to the Unreal Engine repository. Every student repository ends up
-private and readable by your graders, and nobody shares a GitHub login.
+Let students join your GitHub organization by themselves. Every student repository
+ends up private and readable by your graders, and nobody shares a GitHub login.
 
 ## How it works
 
