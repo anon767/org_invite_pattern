@@ -1,0 +1,17 @@
+name: Request access
+description: Get an invite to this organization.
+title: "Access request"
+labels: ["access-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Click **Create** below. You will get an invite to this organization within a minute,
+        by email and in your GitHub notifications. Nothing else to fill in.
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirm
+      options:
+        - label: I am a student in this program.
+          required: true
